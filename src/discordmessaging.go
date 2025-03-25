@@ -127,6 +127,14 @@ func SendMessageToCompanion(m *discordgo.MessageCreate, companion *Companion, bo
 
         stopTyping <- true
 
+        // Sentiment analysis
+        sentiment := analyzeSentiment(m.Content)
+        if sentiment == "negative" {
+            companionReply = "I'm sorry to hear that. How can I help?"
+        } else if sentiment == "positive" {
+            companionReply = "That's great to hear! Tell me more!"
+        }
+
         // Send as a reply to the message that triggered the response, helps keep things orderly
         // But only if this is in a server - if it's a DM, send it as a straight message
         if m.GuildID == "" {
@@ -251,4 +259,3 @@ func (companion *Companion) HandleMessageCreate(s *discordgo.Session, m *discord
 
     companion.Queue.Enqueue(message)
 }
-

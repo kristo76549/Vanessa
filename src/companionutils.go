@@ -172,6 +172,21 @@ func (companion *Companion) ResponseNeeded(m *discordgo.MessageCreate) (bool, st
         }
     }
 
+    // Sentiment analysis
+    sentiment := analyzeSentiment(m.Content)
+    if sentiment == "negative" {
+        respondToThis = true
+        verboseReason = "Sentiment: Negative"
+    } else if sentiment == "positive" {
+        respondToThis = true
+        verboseReason = "Senttiment: Positive"
+    }
+
+    // Enhance AI's memory
+    if respondToThis {
+        updateMemory(companion, m)
+    }
+
     return respondToThis, verboseReason
 }
 
@@ -241,4 +256,18 @@ func (c *Companion) GetEligibleEmojis(message string) []string {
     }
 
     return emojis
+}
+
+// Sentiment analysis function
+func analyzeSentiment(message string) string {
+    // Placeholder for sentiment analysis logic
+    // This function should return "positive", "negative", or "neutral" based on the sentiment of the message
+    // For now, it returns "neutral"
+    return "neutral"
+}
+
+// Update memory function
+func updateMemory(companion *Companion, m *discordgo.MessageCreate) {
+    // Placeholder for memory update logic
+    // This function should update the companion's memory with the new interaction
 }
